@@ -2,13 +2,30 @@ const products = require('../../src/data/products');
 const { getProductById } = require('../../src/catalog');
 
 describe('getProductById', () => {
-  test.todo('ID 1 возвращает products[0]');
-  test.todo('ID 4 возвращает products[3]');
-  test.todo('ID 6 возвращает products[5]');
-  test.todo('ID 0 возвращает null');
-  test.todo('ID 999 возвращает null');
-  test.todo('ID -1 возвращает null');
-  test.todo("строковый ID '1' возвращает null");
+  /* test('ID 1 возвращает products[0]', () => {
+    const result = getProductById(products, 1);
+    expect(result).toEqual(products[0]);
+  }); */
+
+  test.each([
+    [1, [0]],
+    [4, [3]],
+    [6, [5]],
+  ])('ID %s возвращает products[%j]', (query, expectedId) => {
+    const result = getProductById(products, query);
+
+    expect(result).toEqual(products[expectedId]);
+  });
+
+  test.each([[0], [999], [-1], ['1'], [undefined], [NaN]])(
+    'ID %s возвращает null',
+    (query) => {
+      const result = getProductById(products, query);
+
+      expect(result).toEqual(null);
+    },
+  );
+  /*
   test.todo('ID undefined возвращает null');
-  test.todo('ID NaN возвращает null');
+  test.todo('ID NaN возвращает null'); */
 });
